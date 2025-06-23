@@ -1,4 +1,4 @@
-// Configuração Firebase (usa a tua config real)
+// Firebase config (podes substituir pelos teus dados)
 const firebaseConfig = {
   apiKey: "AIzaSyDvtjKEMAXRkfEJ7YGNgs-TW4H2YGzBZbM",
   authDomain: "lmslock-33b95.firebaseapp.com",
@@ -6,8 +6,7 @@ const firebaseConfig = {
   projectId: "lmslock-33b95",
   storageBucket: "lmslock-33b95.appspot.com",
   messagingSenderId: "701373252784",
-  appId: "1:701373252784:web:0118db4f8282c9903e2775",
-  measurementId: "G-0FL77DBKKP"
+  appId: "1:701373252784:web:0118db4f8282c9903e2775"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -19,30 +18,25 @@ const mensagensRef = db.ref('logs/mensagens');
 const listaMensagens = document.getElementById('listaMensagens');
 const loginSection = document.getElementById('loginSection');
 
-let loginForm;  // variável para o formulário que vamos criar dinamicamente
-
-// Cria dinamicamente o formulário e insere na página
+// Criar formulário de login
 function criarFormularioLogin() {
-  loginForm = document.createElement('form');
-  loginForm.id = "loginForm";
-  loginForm.innerHTML = `
+  const form = document.createElement('form');
+  form.id = "loginForm";
+  form.innerHTML = `
     <h2>Login</h2>
     <input type="email" id="email" placeholder="Email" required />
     <input type="password" id="password" placeholder="Senha" required />
     <button type="submit">Entrar</button>
     <p id="loginError" class="error-message"></p>
   `;
-  loginSection.innerHTML = ''; // limpa conteúdo
-  loginSection.appendChild(loginForm);
+  loginSection.innerHTML = '';
+  loginSection.appendChild(form);
 
-  // Escuta submit do form
-  loginForm.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const email = loginForm.querySelector('#email').value.trim();
-    const password = loginForm.querySelector('#password').value.trim();
-    const loginError = loginForm.querySelector('#loginError');
-
+    const email = form.querySelector('#email').value.trim();
+    const password = form.querySelector('#password').value.trim();
+    const loginError = form.querySelector('#loginError');
     try {
       await auth.signInWithEmailAndPassword(email, password);
       loginError.textContent = "";
@@ -57,27 +51,17 @@ function criarFormularioLogin() {
 
 function atualizarLista(mensagens) {
   listaMensagens.innerHTML = '';
-
   if (!mensagens || mensagens.length === 0) {
     listaMensagens.innerHTML = '<li>Nenhuma mensagem disponível.</li>';
     return;
   }
-
   mensagens.forEach(msg => {
     const li = document.createElement('li');
-
-    // Destaco eventos específicos
-    if (msg.codigo.startsWith("MOTION:")) {
-      li.textContent = `${msg.codigo}`;
-    } else {
-      li.textContent = msg.codigo || "Sem código";
-    }
-
-    const spanHora = document.createElement('span');
-    spanHora.classList.add('time');
-    spanHora.textContent = msg.hora || "";
-    li.appendChild(spanHora);
-
+    li.textContent = msg.codigo || "Sem código";
+    const span = document.createElement('span');
+    span.className = "time";
+    span.textContent = msg.hora || "";
+    li.appendChild(span);
     listaMensagens.appendChild(li);
   });
 }
@@ -85,25 +69,15 @@ function atualizarLista(mensagens) {
 function startListening() {
   mensagensRef.on('value', (snapshot) => {
     const data = snapshot.val();
-
     if (!data) {
       atualizarLista(null);
       return;
     }
-
-    let lista = [];
-
-    if (Array.isArray(data)) {
-      lista = data.filter(m => m !== null);
-    } else {
-      lista = Object.values(data);
-    }
-
+    let lista = Array.isArray(data) ? data.filter(m => m !== null) : Object.values(data);
     atualizarLista(lista);
   });
 }
 
-// Controla a visibilidade dos elementos dependendo do estado de autenticação
 auth.onAuthStateChanged(user => {
   if (user) {
     loginSection.style.display = 'none';
