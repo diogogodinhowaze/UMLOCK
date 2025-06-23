@@ -1,4 +1,4 @@
-// Configuração Firebase (substitui pelos teus dados se quiseres)
+// Firebase config (podes substituir pelos teus dados)
 const firebaseConfig = {
   apiKey: "AIzaSyDvtjKEMAXRkfEJ7YGNgs-TW4H2YGzBZbM",
   authDomain: "lmslock-33b95.firebaseapp.com",
@@ -18,6 +18,7 @@ const mensagensRef = db.ref('logs/mensagens');
 const listaMensagens = document.getElementById('listaMensagens');
 const loginSection = document.getElementById('loginSection');
 
+// Criar formulário de login
 function criarFormularioLogin() {
   const form = document.createElement('form');
   form.id = "loginForm";
@@ -88,3 +89,4 @@ auth.onAuthStateChanged(user => {
     criarFormularioLogin();
   }
 });
+
