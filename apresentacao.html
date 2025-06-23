@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Apresentação - UMLOCK</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentação do Projeto</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>UMLOCK</h1>
-    <p>Mais que um simples lock é confiança e segurança!</p>
+    <h1>Apresentação</h1>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="sistema.html">Sistema</a>
+    </nav>
   </header>
-
   <main>
-    <section style="text-align:center; margin-bottom: 20px;">
-      <a href="index.html" class="botao">⬅ Voltar à Página Inicial</a>
-    </section>
-
-    <section class="intro">
-      <p>Seja bem-vindo ao espaço dedicado a amostragem das mensagens que são processadas pelo Arduino, reencaminhadas através de portas serial para o ESP que chegam aqui pela Firebase.</p>
-    </section>
-
-    <section id="loginSection"></section>
-
-    <section id="mensagens" style="display:none;">
-      <h2>Últimas Mensagens do Sistema</h2>
-      <ul id="listaMensagens">
-        <li>Carregando mensagens...</li>
+    <section>
+      <h2>Relatório do Projeto</h2>
+      <ul>
+        <li>INTRODUÇÃO/ENQUADRAMENTO</li>
+        <li>OBJETIVO</li>
+        <li>DESCRIÇÃO</li>
+        <li>FERRAMENTAS E COMPONENTES</li>
+        <li>DESENVOLVIMENTO DO PROJETO</li>
+        <li>ARQUITETURA DO PROJETO</li>
+        <li>LISTAGEM DO CÓDIGO</li>
+        <li>MONTAGENS (HARDWARE)</li>
+        <li>CONCLUSÕES</li>
+        <li>REFERÊNCIAS</li>
       </ul>
+      <p><strong>Download:</strong> <a href="relatorio.pdf" download>Clique aqui para baixar o relatório</a></p>
+    </section>
+    <section>
+      <h2>Mapa de Pinos - ESP8266</h2>
+      <p>Selecione um pino para visualizar a sua função no projeto:</p>
+      <img src="2b45f6c2-8576-4499-bdd4-adf260fd13b5.jpg" alt="ESP8266 pinagem" style="width:100%;max-width:500px">
     </section>
   </main>
-
   <footer>
-    &copy; 2025 Waze Kapa Jota - Todos os direitos reservados
+    &copy; 2025 UMLOCK - Todos os direitos reservados
   </footer>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
-  <script src="firebase.js"></script>
 </body>
 </html>
+
