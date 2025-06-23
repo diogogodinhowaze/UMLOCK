@@ -1,3 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apresentação - UMLOCK</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>UMLOCK</h1>
+    <p>Explorando o fascinante mundo da eletrônica e tecnologia</p>
+  </header>
+
+  <main>
+    <section style="text-align:center; margin-bottom: 20px;">
+      <a href="index.html" class="botao">⬅ Voltar à Página Inicial</a>
+    </section>
+
+    <section class="intro">
+      <p>Seja bem-vindo(a) ao espaço dedicado à eletrônica! Aqui você encontrará imagens inspiradoras de componentes eletrônicos, circuitos e dispositivos que tornam possível a magia da tecnologia moderna.</p>
+    </section>
+
+    <section id="loginSection"></section>
+
+    <section id="mensagens" style="display:none;">
+      <h2>Últimas Mensagens do Sistema</h2>
+      <ul id="listaMensagens">
+        <li>Carregando mensagens...</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Mundo dos Circuitos - Todos os direitos reservados
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDvtjKEMAXRkfEJ7YGNgs-TW4H2YGzBZbM",
+      authDomain: "lmslock-33b95.firebaseapp.com",
+      databaseURL: "https://lmslock-33b95-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "lmslock-33b95",
+      storageBucket: "lmslock-33b95.appspot.com",
+      messagingSenderId: "701373252784",
+      appId: "1:701373252784:web:0118db4f8282c9903e2775"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    const mensagensRef = db.ref('logs/mensagens');
+
+    const listaMensagens = document.getElementById('listaMensagens');
+    const loginSection = document.getElementById('loginSection');
+
+    function criarFormularioLogin() {
+      const loginForm = document.createElement('form');
+      loginForm.id = "loginForm";
+      loginForm.innerHTML = `
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Senha" required />
+        <button type="submit">Entrar</button>
+        <p id="loginError" class="error-message"></p>
+      `;
+      loginSection.innerHTML = '';
+      loginSection.appendChild(loginForm);
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = loginForm.querySelector('#email').value.trim();
+        const password = loginForm.querySelector('#password').value.trim();
+        const loginError = loginForm.querySelector('#loginError');
+
+        try {
+          await auth.signInWithEmailAndPassword(email, password);
+          loginError.textContent = "";
+          loginSection.style.display = 'none';
+          document.getElementById('mensagens').style.display = 'block';
+          startListening();
+        } catch (error) {
+          loginError.textContent = error.message;
+        }
+      });
+    }
+
+    function atualizarLista(mensagens) {
+      listaMensagens.innerHTML = '';
+
+      if (!mensagens || mensagens.length === 0) {
+        listaMensagens.innerHTML = '<li>Nenhuma mensagem disponível.</li>';
+        return;
+      }
+
+      mensagens.forEach(msg => {
+        const li = document.createElement('li');
+        li.textContent = msg.codigo || "Sem código";
+        const span = document.createElement('span');
+        span.classList.add('time');
+        span.textContent = msg.hora || "";
+        li.appendChild(span);
+        listaMensagens.appendChild(li);
+      });
+    }
+
+    function startListening() {
+      mensagensRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        const lista = Array.isArray(data) ? data.filter(m => m !== null) : Object.values(data);
+        atualizarLista(lista);
+      });
+    }
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        loginSection.style.display = 'none';
+        document.getElementById('mensagens').style.display = 'block';
+        startListening();
+      } else {
+        loginSection.style.display = 'block';
+        document.getElementById('mensagens').style.display = 'none';
+        criarFormularioLogin();
+      }
+    });
+  </script>
+</body>
+</html>
 
 
 
